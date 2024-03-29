@@ -268,6 +268,7 @@ void R_BuildLightmapChains (void)
 	for (i=0; i < MAX_FITZQUAKE_LIGHTMAPS; i++)
 		lightmap[i].polys = NULL;
 
+	// TODO: RUSSELL
 	// now rebuild them
 	s = &cl.worldmodel->surfaces[cl.worldmodel->firstmodelsurface];
 	for (i=0 ; i<cl.worldmodel->nummodelsurfaces ; i++, s++)

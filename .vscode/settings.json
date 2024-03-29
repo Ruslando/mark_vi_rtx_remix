@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "ios": "c",
+        "xiosbase": "c",
+        "*.q1": "c"
+    }
+}

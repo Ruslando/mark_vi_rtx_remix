@@ -305,14 +305,14 @@ static void R_RenderScene_SetupScene_SetupGL (void)
 	}
 
 	eglMatrixMode(GL_MODELVIEW);
-		eglLoadIdentity ();
+	eglLoadIdentity ();
 
-		eglRotatef (-90,  1, 0, 0);	    // put Z going up
-		eglRotatef (90,  0, 0, 1);	    // put Z going up
-		eglRotatef (-r_refdef.viewangles[2],  1, 0, 0);
-		eglRotatef (-r_refdef.viewangles[0],  0, 1, 0);
-		eglRotatef (-r_refdef.viewangles[1],  0, 0, 1);
-		eglTranslatef (-r_refdef.vieworg[0],  -r_refdef.vieworg[1],  -r_refdef.vieworg[2]);
+	eglRotatef (-90,  1, 0, 0);	    // put Z going up
+	eglRotatef (90,  0, 0, 1);	    // put Z going up
+	eglRotatef (-r_refdef.viewangles[2],  1, 0, 0);
+	eglRotatef (-r_refdef.viewangles[0],  0, 1, 0);
+	eglRotatef (-r_refdef.viewangles[1],  0, 0, 1);
+	eglTranslatef (-r_refdef.vieworg[0],  -r_refdef.vieworg[1],  -r_refdef.vieworg[2]);
 
 	eglGetFloatv (GL_MODELVIEW_MATRIX, r_modelview_matrix); // Store off the model view matrix.  (r_world_matrix)
 
@@ -323,7 +323,7 @@ static void R_RenderScene_SetupScene_SetupGL (void)
 	//}
 
 	if (!frame.do_glwarp) {
-		eglGetFloatv (GL_MODELVIEW_MATRIX, r_modelview_matrix); // Store off the model view matrix.  (r_world_matrix)
+		// eglGetFloatv (GL_MODELVIEW_MATRIX, r_modelview_matrix); // Store off the model view matrix.  (r_world_matrix)
 		memcpy (focus0.game_modelview.m16, r_modelview_matrix, sizeof(r_modelview_matrix)); // Fill game projection matrix.
 		VectorCopy (r_refdef.vieworg /*src*/, focus0.game_org);						// Rendering origin
 		VectorCopy (r_refdef.viewangles /*src*/, focus0.game_angles);				// Rendering angles (ok for click look)
@@ -335,6 +335,7 @@ static void R_RenderScene_SetupScene_SetupGL (void)
 	//
 	// set drawing parms
 	//
+	// TODO: RUSSELL
 	if (gl_cull.value)
 		eglEnable(GL_CULL_FACE);
 	else
@@ -448,6 +449,7 @@ static void R_RenderScene_RenderView_SetupView (void)
 	//johnfitz
 
 	if (frame.in_mirror_draw == false /* because if true we already did all of this for the frame ... well mostly */) {
+		// TODO: RUSSELL
 		R_SetFrustum (r_fovx, r_fovy); //johnfitz -- use r_fov* vars
 		R_MarkSurfaces (); //johnfitz -- create texture chains from PVS
 		R_CullSurfaces (); //johnfitz -- do after R_SetFrustum and R_MarkSurfaces

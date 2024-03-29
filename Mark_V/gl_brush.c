@@ -594,6 +594,7 @@ void R_DrawBrushModel (entity_t *e)
 	if (e->model->mirror_only_surface)
 		return; // Only the mirror draws, that does not occur here.
 
+	// TODO: RUSSELL remove anti-culling
 	if (R_CullModelForEntity(e))
 		return;
 
@@ -616,6 +617,7 @@ void R_DrawBrushModel (entity_t *e)
 
 	psurf = &clmodel->surfaces[clmodel->firstmodelsurface];
 
+// TODO: RUSSELL
 // calculate dynamic lighting for bmodel if it's not an
 // instanced model (like a healthbox ... external brush models supply their own lighting)
 	if (clmodel->firstmodelsurface != 0 && !gl_flashblend.value)
@@ -690,6 +692,7 @@ void R_DrawBrushModel_ShowTris (entity_t *e)
 	qmodel_t		*clmodel;
 	glpoly_t	*p;
 
+	// TODO: RUSSELL
 	if (R_CullModelForEntity(e))
 		return;
 
@@ -1224,6 +1227,7 @@ assumes lightmap texture is already bound
 */
 static void R_UploadLightmap_Changed_Region (const msurface_t *surf, int in_lightmapnum)
 {
+	// TODO: RUSSELL
 	int lightmapnum = !surf ? in_lightmapnum : surf->lightmaptexturenum;
 
 	if (!lightmap[lightmapnum].modified)
@@ -1251,6 +1255,7 @@ static void R_UploadLightmap_Changed_Region (const msurface_t *surf, int in_ligh
 
 void R_UploadLightmaps_Modified (void)
 {
+	// TODO: RUSSELL
 	int i;
 
 	for (i = 0; i < MAX_FITZQUAKE_LIGHTMAPS; i++)

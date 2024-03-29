@@ -334,7 +334,9 @@ typedef struct d3d_matrix_s
 } d3d_matrix_t;
 
 // init all matrixes to be dirty and at depth 0 (these will be re-inited each frame)
-static d3d_matrix_t d3d_ModelViewMatrix = {TRUE, 0, D3DTS_WORLD};
+// TODO: RUSSELL, SET BACK TO VIEW INSTEAD OF WORLD
+static d3d_matrix_t d3d_ModelViewMatrix = {TRUE, 0, D3DTS_VIEW};
+// static d3d_matrix_t d3d_ModelViewMatrix = {TRUE, 0, D3DTS_WORLD};
 static d3d_matrix_t d3d_ProjectionMatrix = {TRUE, 0, D3DTS_PROJECTION};
 
 static d3d_matrix_t *d3d_CurrentMatrix = &d3d_ModelViewMatrix;
@@ -1125,7 +1127,9 @@ static void GL_SubmitVertexes (void)
 		// D3D has a separate view matrix which is concatenated with the world in OpenGL.  We maintain
 		// a compatible interface by just setting the D3D view matrix to identity and doing all modelview
 		// transforms via the world matrix.
-		D3DMATRIX d3d_ViewMatrix;
+		//  D3DMATRIX d3d_ViewMatrix;
+		// D3DMATRIX d3d_ProjMatrix;
+		D3DMATRIX d3d_WorldMatrix;
 
 		// issue a beginscene (geometry needs this
 		IDirect3DDevice8_BeginScene (d3d_Device);
@@ -1140,8 +1144,31 @@ static void GL_SubmitVertexes (void)
 		d3d_SceneBegun = TRUE;
 
 		// now set our identity view matrix
-		D3DXMatrixIdentity (&d3d_ViewMatrix);
-		IDirect3DDevice8_SetTransform (d3d_Device, D3DTS_VIEW, &d3d_ViewMatrix);
+		// TODO: RUSSELL
+		D3DXMatrixIdentity (&d3d_WorldMatrix);
+		//  D3DXMatrixIdentity (&d3d_ViewMatrix);
+
+		//  D3DXVECTOR3 eye; eye.x = 0.0f; eye.y = 0.0f; eye.z = -5.0f;
+		//  D3DXVECTOR3 look; look.x = 0.0f; look.y = 0.0f; look.z = 0.0f;
+		//  D3DXVECTOR3 up; up.x = 0.0f; up.y = 1.0f; up.z = 0.0f;
+		
+		//  D3DXMatrixLookAtLH(&d3d_ViewMatrix,
+		//  	&eye, // Eye position
+		//  	&look,  // Look-at position
+		//  	&up); // Up direction
+
+		 // Define projection matrix (perspective projection)
+		 //D3DXMatrixPerspectiveFovLH(&d3d_ProjMatrix,
+		 //	D3DX_PI / 4,    // Field of view
+		 //	1.0f,           // Aspect ratio
+		 //	1.0f,           // Near clipping plane
+		 //	100.0f);        // Far clipping plane
+
+		//  D3DXMatrixPerspectiveOffCenterRH(&d3d_ProjMatrix, -1.38f, 1.38f, -0.675f, 0.675f, 1.0f, 16384.0f);
+
+		IDirect3DDevice8_SetTransform (d3d_Device, D3DTS_WORLD, &d3d_WorldMatrix);
+		//  IDirect3DDevice8_SetTransform(d3d_Device, D3DTS_VIEW, &d3d_ViewMatrix);
+		// IDirect3DDevice8_SetTransform(d3d_Device, D3DTS_PROJECTION, &d3d_ProjMatrix);
 	}
 
 #if DX8_USE_POLYGON_OFFSET
@@ -3300,6 +3327,9 @@ void APIENTRY d3dmh_glGetFloatv (GLenum pname, GLfloat *params)
 
 	switch (pname)
 	{
+	case GL_PROJECTION_MATRIX:
+		memcpy (params, d3d_ProjectionMatrix.stack[d3d_ProjectionMatrix.stackdepth].m, sizeof (float) * 16);
+		break;
 	case GL_MODELVIEW_MATRIX:
 		memcpy (params, d3d_ModelViewMatrix.stack[d3d_ModelViewMatrix.stackdepth].m, sizeof (float) * 16);
 		break;
